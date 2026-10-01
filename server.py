@@ -155,9 +155,20 @@ def load_scanner():
     root_text = str(root)
     if root_text not in sys.path:
         sys.path.insert(0, root_text)
-    from scanner.live import accept_photo, client_error_body
+    from scanner.live import client_error_body, preview_photo
+    from scanner.release_session import ReleaseUnavailable, load_release
 
-    return accept_photo, client_error_body
+    # The scanner's own server loads the named release before it takes a
+    # photo. Without it every scan stops with ReleaseUnavailable.
+    try:
+        print(f"kb_version={load_release()}", flush=True)
+    except ReleaseUnavailable as error:
+        raise SystemExit(
+            f"{error}\nStart the review database (upf-dev-pg) and check "
+            "OWNER_REVIEWER_PASSWORD in the original project's .env."
+        ) from None
+
+    return preview_photo, client_error_body
 
 
 def _boundary(content_type: str) -> bytes | None:
@@ -275,9 +286,14 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(encoded)
 
 
-def serve(port: int = PORT) -> None:
+def connect_scanner() -> None:
+    """Load the original scanner once. Both front ends call this."""
     global _accept_photo, _client_error_body
     _accept_photo, _client_error_body = load_scanner()
+
+
+def serve(port: int = PORT) -> None:
+    connect_scanner()
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     print(f"Open http://127.0.0.1:{port}", flush=True)
     try:

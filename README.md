@@ -1,11 +1,13 @@
 # Ultra-processed food scanner (web)
 
-A Python page you can host on your own machine. Submit a photo that shows an ingredient list. The page asks the scanner in the original project, and shows that result. There is no account step, and this page does not classify the list itself.
+A Python page you can host on your own machine. Submit a photo that shows an ingredient list. The page asks the scanner in the original project, and shows that result. There is no account step, and this page does not classify the list itself. A photo sent here is not saved: no product, picture, or ingredient row is written.
 
 ## Requirements
 
 - The original project next to this folder, at `../Ultra-processed-food`
-- That project's Python, which already has the scanner's libraries
+- That project's Python, which already has the scanner's libraries, plus Streamlit (`..\Ultra-processed-food\apps\Scripts\python.exe -m pip install streamlit`)
+- Ollama running with the scanner's vision model
+- The review database running (the `upf-dev-pg` container) and `OWNER_REVIEWER_PASSWORD` set in the original project's `.env`. The scanner reads its released knowledge base from there, and the page stops at startup if it cannot.
 
 If the original project is somewhere else, set `UPF_SCANNER_ROOT` to its folder before starting.
 
@@ -14,12 +16,20 @@ If the original project is somewhere else, set `UPF_SCANNER_ROOT` to its folder 
 From this folder:
 
 ```bash
+..\Ultra-processed-food\apps\Scripts\python.exe -m streamlit run streamlit_app.py
+```
+
+Open [http://127.0.0.1:8501](http://127.0.0.1:8501). The settings are in `.streamlit/config.toml`. The page listens on this machine only.
+
+The plain Python page does the same job and needs no Streamlit:
+
+```bash
 ..\Ultra-processed-food\apps\Scripts\python.exe server.py
 ```
 
 Open [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-Choose a photo of the ingredient list, then choose Check this photo. The result stays on the page until you choose Okay.
+Choose a photo of the ingredient list, then choose Check this photo. The first scan after a break can take a minute while the model loads. The result stays on the page until you choose Okay.
 
 ## What a result means
 
