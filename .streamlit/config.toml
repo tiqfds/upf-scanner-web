@@ -4,6 +4,11 @@ port = 8501
 headless = true
 maxUploadSize = 20
 
+[client]
+# Keeps "Record a screencast" in the top-right menu and hides the developer
+# items (Deploy, Rerun, Clear cache) so they stay out of a recording.
+toolbarMode = "viewer"
+
 [browser]
 gatherUsageStats = false
 

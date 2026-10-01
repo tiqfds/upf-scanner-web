@@ -2,6 +2,14 @@
 
 A Python page you can host on your own machine. Submit a photo that shows an ingredient list. The page asks the scanner in the original project, and shows that result. There is no account step, and this page does not classify the list itself. A photo sent here is not saved: no product, picture, or ingredient row is written.
 
+## Demo
+
+![Uploading a photo of a pasta sauce jar and getting a Group 3 result](docs/demo.gif)
+
+A photo of a pasta sauce jar goes in, and the card shows **Group 3: Processed foods** with the ingredient list. [Watch the full recording](docs/demo.webm) (11 seconds; a live scan can take about 40 seconds).
+
+The scanner that makes this decision is a separate project, so this repository cannot run on its own. The recording shows it working. The sections below explain how it runs when the scanner is next to it.
+
 ## Requirements
 
 - The original project next to this folder, at `../Ultra-processed-food`
@@ -20,6 +28,8 @@ From this folder:
 ```
 
 Open [http://127.0.0.1:8501](http://127.0.0.1:8501). The settings are in `.streamlit/config.toml`. The page listens on this machine only.
+
+To record a demo, open the menu at the top right of the page and choose **Record a screencast**. Your browser asks what to share; pick this tab, scan a photo, then stop the recording and the video downloads. Run one scan first so the model is loaded and the recording is not mostly waiting.
 
 The plain Python page does the same job and needs no Streamlit:
 
