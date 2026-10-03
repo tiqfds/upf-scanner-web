@@ -164,8 +164,7 @@ def load_scanner():
         print(f"kb_version={load_release()}", flush=True)
     except ReleaseUnavailable as error:
         raise SystemExit(
-            f"{error}\nStart the review database (upf-dev-pg) and check "
-            "OWNER_REVIEWER_PASSWORD in the original project's .env."
+            f"{error}\nStart the scanner's review database and check its credentials."
         ) from None
 
     return preview_photo, client_error_body
